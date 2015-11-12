@@ -50,21 +50,21 @@ class Scanner
 
   def hipchat_api_uri
     URI::HTTPS.build(
-      host: "api.hipchat.com",
-      path: "/v1/rooms/message",
-      query: hipchat_api_query.map{ |k, v| "#{k}=#{v}" }.join('&')
+     :host => "api.hipchat.com",
+     :path => "/v1/rooms/message",
+     :query => hipchat_api_query.map{ |k, v| "#{k}=#{v}" }.join('&')
     ).to_s
   end
 
   def hipchat_api_query
     {
-      room_id: @room_id,
-      auth_token: @token,
-      notify: 1,
-      color: @color,
-      message_format: "html",
-      from: "ClamAV",
-      message: @message
+     :room_id => @room_id,
+     :auth_token => @token,
+     :notify => 1,
+     :color => @color,
+     :message_format => "html",
+     :from => "ClamAV",
+     :message => CGI.escape(@message)
     }
   end
 
@@ -78,7 +78,7 @@ class Scanner
     end
     @message = "<strong>%s</strong><br>" % [@color == COLOR_SUCCESS ? "No viruses found" : "We have a problem"]
     @message << "Details: #{@log_filepath}<br>"
-    @message << CGI.escape(@report_lines.join("<br>"))
+    @message << @report_lines.join("<br>")
   end
 end
 
