@@ -7,8 +7,9 @@ class Scanner
   COLOR_FAILURE = "red".freeze
   COLOR_SUCCESS = "green".freeze
 
-  def initialize(log_filepath, room_id, token)
+  def initialize(log_filepath, scan_path, room_id, token)
     @log_filepath = log_filepath
+    @scan_path = scan_path
     @room_id = room_id
     @token = token
     @color = COLOR_FAILURE
@@ -41,7 +42,7 @@ class Scanner
   private
 
   def scan_cmd
-    "clamscan --infected --suppress-ok-results --recursive --detect-pua=yes --remove=no /"
+    "clamscan --infected --suppress-ok-results --recursive --detect-pua=yes --remove=no #{@scan_path}"
   end
 
   def notify_cmd
@@ -83,6 +84,11 @@ class Scanner
 end
 
 
-scan = Scanner.new(ENV["AVSCAN_LOG_FILE"], ENV["AVSCAN_HIPCHAT_ROOM_ID"], ENV["AVSCAN_HIPCHAT_ROOM_TOKEN"])
+scan = Scanner.new(
+  ENV["AVSCAN_LOG_FILE"],
+  ENV["AVSCAN_PATH"],
+  ENV["AVSCAN_HIPCHAT_ROOM_ID"],
+  ENV["AVSCAN_HIPCHAT_ROOM_TOKEN"]
+)
 scan.run
 scan.notify
